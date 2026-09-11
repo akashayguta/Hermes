@@ -4,9 +4,14 @@ USER root
 
 COPY start.sh /start.sh
 
-# Convert CRLF → LF and make the script executable
 RUN sed -i 's/\r$//' /start.sh && \
-    chmod +x /start.sh
+    chmod +x /start.sh && \
+    mkdir -p /opt/data && \
+    chown -R hermes:hermes /opt/data /start.sh
+
+ENV HERMES_HOME=/opt/data
+ENV HOME=/home/hermes
+ENV PYTHONUNBUFFERED=1
 
 USER hermes
 
