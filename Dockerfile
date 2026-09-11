@@ -16,4 +16,4 @@ RUN sed -i 's/\r$//' /start.sh \
 
 USER hermes
 
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/bin/sh", "/start.sh"]
