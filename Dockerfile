@@ -2,17 +2,18 @@ FROM nousresearch/hermes-agent:latest
 
 USER root
 
+ENV HOME=/data
+ENV HERMES_HOME=/data/.hermes
+ENV PYTHONUNBUFFERED=1
+
+RUN mkdir -p /data/.hermes \
+    && chown -R hermes:hermes /data
+
 COPY start.sh /start.sh
 
-RUN sed -i 's/\r$//' /start.sh && \
-    chmod +x /start.sh && \
-    mkdir -p /opt/data && \
-    chown -R hermes:hermes /opt/data /start.sh
-
-ENV HERMES_HOME=/opt/data
-ENV HOME=/home/hermes
-ENV PYTHONUNBUFFERED=1
+RUN chmod +x /start.sh \
+    && chown hermes:hermes /start.sh
 
 USER hermes
 
-ENTRYPOINT ["/bin/sh", "/start.sh"]
+ENTRYPOINT ["/start.sh"]
