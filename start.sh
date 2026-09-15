@@ -1,26 +1,23 @@
+FROM nousresearch/hermes-agent:latest
 
-#!/bin/sh
-set -eu
+USER root
 
-echo "======================================"
-echo " HERMES TELEGRAM"
-echo "======================================"
+ENV HOME=/data
+ENV HERMES_HOME=/data/.hermes
 
-export HOME="/data"
-export HERMES_HOME="/data/.hermes"
+# OpenCode Zen
+ENV OPENCODE_BASE_URL=https://opencode.ai/zen/v1
+ENV OPENCODE_MODEL=muse-spark-1.3-contributor-free
 
-mkdir -p "$HERMES_HOME"
+RUN mkdir -p /data/.hermes \
+    && chown -R hermes:hermes /data
 
-echo "Hermes home: $HERMES_HOME"
+COPY start.sh /start.sh
 
-if [ -z "${TELEGRAM_BOT_TOKEN:-}" ]; then
-    echo "ERROR: TELEGRAM_BOT_TOKEN is not configured."
-    exit 1
-fi
+RUN sed -i 's/\r$//' /start.sh \
+    && chmod +x /start.sh \
+    && chown hermes:hermes /start.sh
 
-export TELEGRAM_ALLOWED_USERS="6021047784"
+USER hermes
 
-echo "Telegram owner: 6021047784"
-echo "Starting Hermes Gateway..."
-
-exec hermes gateway
+ENTRYPOINT ["/bin/sh", "/start.sh"]
