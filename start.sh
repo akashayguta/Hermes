@@ -8,9 +8,15 @@ echo "======================================"
 export HOME="/data"
 export HERMES_HOME="/data/.hermes"
 
-mkdir -p "$HERMES_HOME"
-
 echo "Hermes home: $HERMES_HOME"
+
+mkdir -p "$HERMES_HOME"
+mkdir -p "$HERMES_HOME/logs"
+mkdir -p "$HERMES_HOME/cron"
+
+echo "Checking volume permissions..."
+touch "$HERMES_HOME/.write_test"
+rm -f "$HERMES_HOME/.write_test"
 
 if [ -z "${TELEGRAM_BOT_TOKEN:-}" ]; then
     echo "ERROR: TELEGRAM_BOT_TOKEN is not configured."
